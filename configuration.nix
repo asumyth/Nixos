@@ -10,6 +10,11 @@
       ./hardware-configuration.nix
     ];
 
+  environment.sessionVariables = {
+  PATH = [
+    "$HOME/.cargo/bin"
+  ];
+  };
   zramSwap.enable = true;
   services.earlyoom.enable = true;
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -157,9 +162,10 @@
   temurin-bin-21
   temurin-bin-17
   yazi
-  xrizer
-  wivrn
-  wayvr
+  cargo
+  rustup
+  gcc
+  wget
   ];
 
   fonts.packages = with pkgs; [
