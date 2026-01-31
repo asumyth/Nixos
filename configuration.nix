@@ -157,7 +157,9 @@
   temurin-bin-21
   temurin-bin-17
   yazi
-  kdePackages.kdenlive
+  xrizer
+  wivrn
+  wayvr
   ];
 
   fonts.packages = with pkgs; [
