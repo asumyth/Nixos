@@ -70,7 +70,7 @@
   programs.niri.enable = true;
   programs.dms-shell.enable = true;
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true; 
   services.desktopManager.plasma6.enable = true;
 
   services.flatpak.enable = true;
@@ -117,7 +117,6 @@
       yt-dlp
       ffmpeg
       pavucontrol
-      prismlauncher
       lutris
       heroic
       gamescope
@@ -159,13 +158,24 @@
   inputs.nix-citizen.packages.${system}.rsi-launcher
   htop
   btop
-  temurin-bin-21
-  temurin-bin-17
   yazi
   cargo
   rustup
   gcc
   wget
+  spotify
+  kdePackages.kwallet-pam
+  (prismlauncher.override {
+    # Add binary required by some mod
+    additionalPrograms = [ ffmpeg ];
+
+    # Change Java runtimes available to Prism Launcher
+    jdks = [
+      zulu8
+      zulu17
+      zulu25
+    ];
+  })
   ];
 
   fonts.packages = with pkgs; [
@@ -192,6 +202,11 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+  networking.firewall = {
+  enable = true;
+  allowedTCPPorts = [ 25565 ]; # Minecraft Java Default
+  allowedUDPPorts = [ 25565 24454]; # Necessary for some query/bedrock
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
