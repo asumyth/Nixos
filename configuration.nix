@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, pkgs-stable , ... }:
 
 {
   imports =
@@ -72,7 +72,8 @@
   };
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.open = false;  # see the note above
+  hardware.nvidia.open = false;
+
 
   # Display envienvironment
   programs.niri.enable = true;
@@ -85,17 +86,14 @@
   };
   
   };
-  # KDE DISABLED
-  # services.desktopManager.plasma6.enable = true;
-  # Enable the COSMIC login manager
-  services.displayManager.cosmic-greeter.enable = true;
 
-  # Enable the COSMIC desktop environment
-  services.desktopManager.cosmic.enable = true;
+  services.displayManager.dms-greeter = {
+    enable = true;
+    compositor.name = "niri";
+    configHome = "/home/asumyth" ;
+  };
 
-  # services.desktopManager.gnome.enable = true;
   security.polkit.enable = true;
-  
   services.flatpak.enable = true;
 
   # Configure keymap in X11
@@ -116,23 +114,23 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
+  services.pipewire.wireplumber.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  systemd.user.services.pipewire.wantedBy = [ "default.target" ];
+  systemd.user.sockets.pipewire.wantedBy = [ "default.target" ];
+  systemd.user.services.wireplumber.wantedBy = [ "default.target" ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.asumyth = {
     isNormalUser = true;
     description = "Asumyth";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      # kdePackages.kate
       vivaldi
       ungoogled-chromium
       vesktop
@@ -141,9 +139,8 @@
       bitwig-studio
       yt-dlp
       ffmpeg
-      pavucontrol
       lutris
-      heroic
+      pkgs-stable.heroic
       gamescope
       mangohud
       ];
@@ -152,23 +149,31 @@
                 "openssl-1.1.1w"
               ];
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   programs.steam = {
-  enable = true;
-  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  nix.settings = {
+    substituters = ["https://nix-citizen.cachix.org"];
+    trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
+  };
+
   environment.systemPackages = with pkgs; [
+  pwvucontrol
+  qpwgraph
+  wivrn
+  openssl
   element-desktop
+  nautilus
+  zip
+  vscode
+  code-cursor
+  nodePackages.nodejs
   helix
   vim
   neovim
@@ -191,6 +196,8 @@
   wget
   spotify
   kdePackages.kwallet-pam
+  kdePackages.kdenlive
+  
   (prismlauncher.override {
     # Add binary required by some mod
     additionalPrograms = [ ffmpeg ];
@@ -203,7 +210,38 @@
       zulu21
     ];
   })
+
+  # (pkgs.writeShellScriptBin "path-of-building" ''
+  #     export QT_QPA_PLATFORM=xcb
+  #     exec ${inputs.pob.apps.${pkgs.system}.default.program} "$@"
+  #   '')
+  # (pkgs.makeDesktopItem {
+  #     name = "path-of-building";
+  #     desktopName = "Path of Building";
+  #     exec = "path-of-building";
+  #     terminal = false;
+  #     categories = [ "Game" ];
+  # })
   ];
+
+
+  services.ollama = {
+  enable = true;
+  package = pkgs.ollama-cuda;
+  # Optional: preload models, see https://ollama.com/library
+  loadModels = [ "llama3.2:3b" "deepseek-r1:8b" "qwen3.5:9b"];
+  };
+  services.open-webui = {
+    enable = true;
+  };
+  services.searx = {
+  enable = true;
+  settings.server.secret_key = "64d93b943ef85b941a23d0769a60f41c7b5c442306a3ff4445253092e8e143d5";
+  settings.search = {
+    formats = [ "html" "json" ];
+    };
+  };
+
 
   fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono
@@ -217,22 +255,11 @@
   dina-font
   proggyfonts
   ];
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
   networking.firewall = {
   enable = true;
-  allowedTCPPorts = [ 25565 ]; # Minecraft Java Default
-  allowedUDPPorts = [ 25565 24454]; # Necessary for some query/bedrock
+  allowedTCPPorts = [ ]; # Minecraft Java Default
+  allowedUDPPorts = [ ]; # Necessary for some query/bedrock
   };
 
   # Open ports in the firewall.
