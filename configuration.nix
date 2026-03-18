@@ -130,20 +130,7 @@
     isNormalUser = true;
     description = "Asumyth";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      vivaldi
-      ungoogled-chromium
-      vesktop
-      fastfetch
-      nil
-      bitwig-studio
-      yt-dlp
-      ffmpeg
-      lutris
-      pkgs-stable.heroic
-      gamescope
-      mangohud
-      ];
+    packages = with pkgs; [ ];
   };
   nixpkgs.config.permittedInsecurePackages = [
                 "openssl-1.1.1w"
@@ -164,64 +151,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-  pwvucontrol
-  qpwgraph
-  wivrn
-  openssl
-  element-desktop
-  nautilus
-  zip
-  vscode
-  code-cursor
-  nodePackages.nodejs
-  helix
-  vim
-  neovim
-  wayland-utils
-  mpv
-  # kdePackages.kcalc
-  git
-  alacritty
-  xwayland-satellite
-  fuzzel
-  mako
-  protonplus
-  inputs.nix-citizen.packages.${system}.rsi-launcher
-  htop
-  btop
-  yazi
-  cargo
-  rustup
-  gcc
-  wget
-  spotify
-  kdePackages.kwallet-pam
-  kdePackages.kdenlive
-  
-  (prismlauncher.override {
-    # Add binary required by some mod
-    additionalPrograms = [ ffmpeg ];
-
-    # Change Java runtimes available to Prism Launcher
-    jdks = [
-      zulu8
-      zulu17
-      zulu25
-      zulu21
-    ];
-  })
-
-  # (pkgs.writeShellScriptBin "path-of-building" ''
-  #     export QT_QPA_PLATFORM=xcb
-  #     exec ${inputs.pob.apps.${pkgs.system}.default.program} "$@"
-  #   '')
-  # (pkgs.makeDesktopItem {
-  #     name = "path-of-building";
-  #     desktopName = "Path of Building";
-  #     exec = "path-of-building";
-  #     terminal = false;
-  #     categories = [ "Game" ];
-  # })
+    xwayland-satellite
+    inputs.nix-citizen.packages.${system}.rsi-launcher
+    kdePackages.kwallet-pam
+    kdePackages.kdenlive
   ];
 
 
