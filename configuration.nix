@@ -131,7 +131,7 @@
     description = "Asumyth";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      pkgs-stable-heroic
+      pkgs-stable.heroic
     ];
   };
   nixpkgs.config.permittedInsecurePackages = [
@@ -157,6 +157,8 @@
     inputs.nix-citizen.packages.${system}.rsi-launcher
     kdePackages.kwallet-pam
     kdePackages.kdenlive
+    rustup
+    cargo
   ];
 
 

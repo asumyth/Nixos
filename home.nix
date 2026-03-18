@@ -19,8 +19,6 @@
     btop
     htop
     yazi
-    cargo
-    rustup
     helix
     git
     zip
