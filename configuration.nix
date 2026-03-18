@@ -130,7 +130,9 @@
     isNormalUser = true;
     description = "Asumyth";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
+    packages = with pkgs; [
+      pkgs-stable-heroic
+    ];
   };
   nixpkgs.config.permittedInsecurePackages = [
                 "openssl-1.1.1w"

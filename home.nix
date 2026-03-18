@@ -1,5 +1,5 @@
 
-{ pkgs, pkgs-stable , ... }: {
+{ pkgs, ... }: {
   home.username = "asumyth";
   home.homeDirectory = "/home/asumyth";
   home.stateVersion = "25.11";
@@ -41,7 +41,6 @@
     
     # Gaming
     lutris
-    pkgs-stable.heroic
     gamescope
     mangohud
     protonplus
@@ -60,15 +59,4 @@
     nautilus
     
   ];
-
-
-
-  wayland.windowManager.niri.settings = {
-    spawn-at-startup = [
-      { command = [ "vivaldi" ]; }
-      { command = [ "element-desktop" ]; }
-      { command = [ "steam"];}
-      { command = [ "vesktop"];}
-    ];
-  };
 }
