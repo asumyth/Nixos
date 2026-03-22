@@ -10,6 +10,15 @@
       ./hardware-configuration.nix
     ];
 
+  fileSystems."/mnt/nvme" = {
+    device = "/dev/nvme0n1p3";
+    fsType = "ext4";  # or whatever blkid reports
+  };
+
+  fileSystems."/mnt/bigdrive" = {
+    device = "/dev/sda2";
+    fsType = "ext4";
+  };
   environment.sessionVariables = {
   PATH = [
     "$HOME/.cargo/bin"

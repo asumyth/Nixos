@@ -11,7 +11,8 @@
     vivaldi
     vesktop
     element-desktop
-    
+    fluffychat
+        
     # System tools
     fastfetch
     gcc
