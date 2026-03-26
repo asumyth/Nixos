@@ -12,7 +12,8 @@
     vesktop
     element-desktop
     fluffychat
-        
+    droidcam
+    
     # System tools
     fastfetch
     gcc
@@ -26,6 +27,7 @@
     wayland-utils
     alacritty
     fuzzel
+    gimp
     
     #language server
     nil
