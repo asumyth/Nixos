@@ -20,7 +20,7 @@
     enable = true;
     clean.enable = true;        # auto-runs nh clean
     clean.extraArgs = "--keep-since 7d --keep 5";
-    flake = "/home/asumyth/Nixos";
+    flake = "/home/asumyth/nixos";
   };
 
   nix.settings = {
