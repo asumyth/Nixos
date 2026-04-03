@@ -41,6 +41,7 @@
     qpwgraph
     
     # Gaming
+    heroic
     lutris
     gamescope
     mangohud

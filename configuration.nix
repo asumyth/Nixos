@@ -10,14 +10,9 @@
       ./hardware-configuration.nix
     ];
 
-  environment.sessionVariables = {
-  PATH = [
-    "$HOME/.cargo/bin"
-  ];
-  };
   zramSwap.enable = true;
   services.earlyoom.enable = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  
   # disk usage opt i
   boot.loader.systemd-boot.configurationLimit = 10;
   
@@ -26,8 +21,13 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
-  
-  nix.settings.auto-optimise-store = true;
+
+  nix.settings = {
+    experimental-features = ["nix-command" "flakes"];
+    auto-optimise-store = true;
+    substituters = ["https://nix-citizen.cachix.org"];
+    trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -90,7 +90,7 @@
   services.displayManager.dms-greeter = {
     enable = true;
     compositor.name = "niri";
-    configHome = "/home/asumyth" ;
+    configHome = config.users.users.asumyth.home ;
   };
 
   security.polkit.enable = true;
@@ -113,13 +113,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
+
   services.pipewire.wireplumber.enable = true;
 
   systemd.user.services.pipewire.wantedBy = [ "default.target" ];
@@ -130,10 +126,8 @@
     isNormalUser = true;
     description = "Asumyth";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      pkgs-stable.heroic
-    ];
   };
+
   nixpkgs.config.permittedInsecurePackages = [
                 "openssl-1.1.1w"
               ];
@@ -147,18 +141,12 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
-  nix.settings = {
-    substituters = ["https://nix-citizen.cachix.org"];
-    trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
-  };
-
   environment.systemPackages = with pkgs; [
     xwayland-satellite
     inputs.nix-citizen.packages.${system}.rsi-launcher
     kdePackages.kwallet-pam
     kdePackages.kdenlive
     rustup
-    cargo
   ];
 
 
@@ -173,7 +161,7 @@
   };
   services.searx = {
   enable = true;
-  settings.server.secret_key = "64d93b943ef85b941a23d0769a60f41c7b5c442306a3ff4445253092e8e143d5";
+  settings.server.secret_key = "/etc/secrets/searx-env";
   settings.search = {
     formats = [ "html" "json" ];
     };
@@ -203,8 +191,8 @@
 
   networking.firewall = {
   enable = true;
-  allowedTCPPorts = [ ]; # Minecraft Java Default
-  allowedUDPPorts = [ ]; # Necessary for some query/bedrock
+  #allowedTCPPorts = [ ];
+  #allowedUDPPorts = [ ]; 
   };
 
   # Open ports in the firewall.
