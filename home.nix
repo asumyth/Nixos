@@ -3,7 +3,7 @@
   home.username = "asumyth";
   home.homeDirectory = "/home/asumyth";
   home.stateVersion = "25.11";
-
+  xdg.enable = true;
   home.packages = with pkgs;[
     
     
@@ -28,8 +28,7 @@
     alacritty
     fuzzel
     gimp
-    comma
-    
+     
     #language server
     nil
 
@@ -58,8 +57,9 @@
     # Dev misc
     vscode
     code-cursor
-    nodePackages.nodejs
+    nodejs
     nautilus
+    lmstudio
     
   ];
 }

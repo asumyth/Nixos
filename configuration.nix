@@ -93,7 +93,9 @@
     compositor.name = "niri";
     configHome = config.users.users.asumyth.home ;
   };
-
+  
+  programs.nix-index-database.comma.enable = true;
+  
   security.polkit.enable = true;
   services.flatpak.enable = true;
 

@@ -16,11 +16,11 @@
       url = "git+https://git.outfoxxed.me/quickshell/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pob.url = "github:ciiol/path-of-building-flake";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+};
 
-  };
-
-  outputs = { self, nixpkgs, stable , home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, stable , home-manager, nix-index-database,  ... }@inputs: {
    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs;
         pkgs-stable = import stable {
@@ -30,6 +30,7 @@
       };
       modules = [
         ./configuration.nix
+       nix-index-database.nixosModules.default
        home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
