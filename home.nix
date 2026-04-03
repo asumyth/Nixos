@@ -28,6 +28,7 @@
     alacritty
     fuzzel
     gimp
+    comma
     
     #language server
     nil

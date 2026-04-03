@@ -16,10 +16,11 @@
   # disk usage opt i
   boot.loader.systemd-boot.configurationLimit = 10;
   
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  programs.nh = {
+    enable = true;
+    clean.enable = true;        # auto-runs nh clean
+    clean.extraArgs = "--keep-since 7d --keep 5";
+    flake = "/home/asumyth/Nixos";
   };
 
   nix.settings = {
