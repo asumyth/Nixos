@@ -150,6 +150,8 @@
     kdePackages.kwallet-pam
     kdePackages.kdenlive
     rustup
+    cargo
+    rustc
   ];
 
 

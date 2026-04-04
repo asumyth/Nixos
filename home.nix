@@ -47,6 +47,7 @@
     mangohud
     protonplus
     wivrn
+    wayvr
     openssl
 
     (prismlauncher.override {
