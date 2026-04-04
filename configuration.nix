@@ -153,15 +153,6 @@
   ];
 
 
-  services.ollama = {
-  enable = true;
-  package = pkgs.ollama-cuda;
-  # Optional: preload models, see https://ollama.com/library
-  loadModels = [ "llama3.2:3b" "deepseek-r1:8b" "qwen3.5:9b"];
-  };
-  services.open-webui = {
-    enable = true;
-  };
   services.searx = {
   enable = true;
   settings.server.secret_key = "/etc/secrets/searx-env";
