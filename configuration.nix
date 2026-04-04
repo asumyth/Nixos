@@ -169,7 +169,7 @@
       droidcam-obs
     ];
   };
-  programs.wivrn = {
+  services.wivrn = {
     enable = true;
     openFirewall = true;
     autoStart = true;
