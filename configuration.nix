@@ -128,7 +128,7 @@
   users.users.asumyth = {
     isNormalUser = true;
     description = "Asumyth";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input"];
   };
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -137,13 +137,24 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.sessionVariables = {
+    STEAMVR_PATH = "/home/asumyth/.local/share/Steam/steamapps/common/SteamVR";
+  };
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    extraCompatPackages = [ pkgs.proton-ge-bin ]; 
+    package = pkgs.steam.override {
+    extraLibraries = pkgs: [ pkgs.SDL2 ];
   };
+  hardware.steam-hardware.enable = true;
 
+  system.nssModules = [ ]; # sometimes helps with lib resolution
+    environment.sessionVariables = {
+    LD_LIBRARY_PATH = "${pkgs.SDL2}/lib:$LD_LIBRARY_PATH";
+  };
   environment.systemPackages = with pkgs; [
     xwayland-satellite
     inputs.nix-citizen.packages.${system}.rsi-launcher
@@ -152,6 +163,7 @@
     rustup
     cargo
     rustc
+    SDL2
   ];
 
 
@@ -174,9 +186,7 @@
     openFirewall = true;
     autoStart = true;
     package = (pkgs.wivrn.override {
-      WIVRN_FEATURE_STEAMVR_LIGHTHOUSE = true;
-      cudaSupport = true; });
-    use-steamvr-lh = true;
+       cudaSupport = true; });
   };
 
 
