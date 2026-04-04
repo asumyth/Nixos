@@ -46,8 +46,8 @@
     gamescope
     mangohud
     protonplus
-    wivrn
     wayvr
+    motoc
     openssl
 
     (prismlauncher.override {

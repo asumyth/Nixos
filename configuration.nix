@@ -169,6 +169,15 @@
       droidcam-obs
     ];
   };
+  programs.wivrn = {
+    enable = true;
+    openFirewall = true;
+    autoStart = true;
+    package = (pkgs.wivrn.override {
+      WIVRN_FEATURE_STEAMVR_LIGHTHOUSE = true;
+      cudaSupport = true; });
+    use-steamvr-lh = true;
+  };
 
 
 
