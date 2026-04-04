@@ -140,6 +140,7 @@
   environment.sessionVariables = {
     STEAMVR_PATH = "/home/asumyth/.local/share/Steam/steamapps/common/SteamVR";
   };
+  
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -147,14 +148,11 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
     extraCompatPackages = [ pkgs.proton-ge-bin ]; 
     package = pkgs.steam.override {
-    extraLibraries = pkgs: [ pkgs.SDL2 ];
+      extraLibraries = pkgs: [ pkgs.SDL2 ];
+    };
   };
   hardware.steam-hardware.enable = true;
 
-  system.nssModules = [ ]; # sometimes helps with lib resolution
-    environment.sessionVariables = {
-    LD_LIBRARY_PATH = "${pkgs.SDL2}/lib:$LD_LIBRARY_PATH";
-  };
   environment.systemPackages = with pkgs; [
     xwayland-satellite
     inputs.nix-citizen.packages.${system}.rsi-launcher
@@ -181,12 +179,34 @@
       droidcam-obs
     ];
   };
+
+  programs.nix-ld.enable = true;
+
   services.wivrn = {
-    enable = true;
-    openFirewall = true;
-    autoStart = true;
-    package = (pkgs.wivrn.override {
-       cudaSupport = true; });
+  enable = true;
+  openFirewall = true;
+  autoStart = true;
+  
+  package = (pkgs.wivrn.override {
+    cudaSupport = true;
+  }).overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or []) ++ [
+      "-DWIVRN_FEATURE_STEAMVR_LIGHTHOUSE=ON"
+    ];
+    
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
+    
+    # Use makeLibraryPath to inject both SDL2 and udev into the environment
+    postFixup = (old.postFixup or "") + ''
+      wrapProgram $out/bin/wivrn-server \
+        --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [ pkgs.SDL2 pkgs.udev ]}"
+    '';
+  });
+  };
+  systemd.services.wivrn = {
+    environment = {
+      LD_LIBRARY_PATH = "${pkgs.SDL2}/lib";
+    };
   };
 
 

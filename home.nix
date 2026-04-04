@@ -49,6 +49,7 @@
     wayvr
     motoc
     openssl
+    lighthouse-steamvr
 
     (prismlauncher.override {
       additionalPrograms = [ ffmpeg ];
