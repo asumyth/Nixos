@@ -179,9 +179,13 @@
       droidcam-obs
     ];
   };
-
-  programs.nix-ld.enable = true;
-
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      openxr-loader
+      icu
+    ];
+  };
   services.wivrn = {
   enable = true;
   openFirewall = true;
