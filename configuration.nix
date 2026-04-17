@@ -118,6 +118,8 @@
     pulse.enable = true;
     jack.enable = true;
   };
+  hardware.enableAllFirmware = true;
+
 
   services.pipewire.wireplumber.enable = true;
 
