@@ -35,7 +35,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -194,7 +194,7 @@
   autoStart = true;
   
   package = (pkgs.wivrn.override {
-    cudaSupport = true;
+#    cudaSupport = true;
   }).overrideAttrs (old: {
     cmakeFlags = (old.cmakeFlags or []) ++ [
       "-DWIVRN_FEATURE_STEAMVR_LIGHTHOUSE=ON"
