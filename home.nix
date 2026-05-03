@@ -41,6 +41,7 @@
     qpwgraph
     
     # Gaming
+    faugus-launcher
     heroic
     gamescope
     mangohud
