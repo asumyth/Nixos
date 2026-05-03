@@ -42,7 +42,6 @@
     
     # Gaming
     heroic
-    lutris
     gamescope
     mangohud
     protonplus

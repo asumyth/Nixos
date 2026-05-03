@@ -35,7 +35,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -155,6 +155,8 @@
   };
   hardware.steam-hardware.enable = true;
 
+  services.usbmuxd.enable = true;
+
   environment.systemPackages = with pkgs; [
     xwayland-satellite
     inputs.nix-citizen.packages.${system}.rsi-launcher
@@ -164,6 +166,8 @@
     cargo
     rustc
     SDL2
+    ifuse
+    libimobiledevice
   ];
 
 
