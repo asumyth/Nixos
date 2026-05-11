@@ -15,6 +15,8 @@
     droidcam
     
     # System tools
+    unrar
+    p7zip
     fastfetch
     gcc
     wget
@@ -28,7 +30,9 @@
     alacritty
     fuzzel
     gimp
-     
+    gamemode
+    easyeffects
+         
     #language server
     nil
 
@@ -42,6 +46,7 @@
     
     # Gaming
     faugus-launcher
+    osu-lazer-bin
     heroic
     gamescope
     mangohud
