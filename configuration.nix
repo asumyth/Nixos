@@ -47,7 +47,13 @@
   # Enable networking
   networking.networkmanager.enable = true;
   hardware.bluetooth.enable = true;
-    
+
+  services.mullvad-vpn = {
+  enable = true;
+  package = pkgs.mullvad-vpn;
+  };
+  services.resolved.enable = true;
+  
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
 
@@ -130,7 +136,7 @@
   users.users.asumyth = {
     isNormalUser = true;
     description = "Asumyth";
-    extraGroups = [ "networkmanager" "wheel" "input"];
+    extraGroups = [ "networkmanager" "wheel" "input" "gamemode"];
   };
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -192,6 +198,8 @@
       icu
     ];
   };
+  programs.gamemode.enable = true;
+
   services.wivrn = {
   enable = true;
   openFirewall = true;

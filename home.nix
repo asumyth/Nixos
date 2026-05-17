@@ -30,7 +30,6 @@
     alacritty
     fuzzel
     gimp
-    gamemode
     easyeffects
          
     #language server
