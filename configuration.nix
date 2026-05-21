@@ -36,7 +36,16 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+  hid-tmff2
+  ];
+  boot.kernelModules = [ "ntsync" "hid-tmff2" ];
+  boot.blacklistedKernelModules = [ "hid_thrustmaster" ];
 
+
+  services.udev.extraRules = ''
+  SUBSYSTEM=="input", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b664", MODE="0666", GROUP="input"
+  '';  
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -125,7 +134,6 @@
     jack.enable = true;
   };
   hardware.enableAllFirmware = true;
-
 
   services.pipewire.wireplumber.enable = true;
 

@@ -30,7 +30,6 @@
     alacritty
     fuzzel
     gimp
-    easyeffects
          
     #language server
     nil
@@ -68,4 +67,7 @@
     lmstudio
     
   ];
+  
+  services.easyeffects.enable = true;
+  
 }
