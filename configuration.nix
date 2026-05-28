@@ -89,16 +89,22 @@
     LC_TIME = "fi_FI.UTF-8";
   };
 
-  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    open = false;
+    nvidiaSettings = true;
+  };
+
+
   environment.variables = {
   NIXOS_OZONE_WL = "1"; # Hint electron apps to use Wayland
   WLR_NO_HARDWARE_CURSORS = "1"; # If cursor is invisible/glitchy
   };
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.open = true;
-
-
+ 
   # Display envienvironment
   programs.niri.enable = true;
   programs.dms-shell = {
