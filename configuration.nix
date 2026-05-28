@@ -36,16 +36,24 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-  hid-tmff2
-  ];
+  # Load the community Thrustmaster driver for your specific kernel
+  boot.extraModulePackages = [ config.boot.kernelPackages.hid-tmff2 ];
   boot.kernelModules = [ "ntsync" "hid-tmff2" ];
   boot.blacklistedKernelModules = [ "hid_thrustmaster" ];
 
 
+  # Enable Protontricks idiomatically
+  programs.steam.protontricks.enable = true;
+
+  # Allows Oversteer to communicate with the wheel without root privileges
+  services.udev.packages = [ pkgs.oversteer ];
+
   services.udev.extraRules = ''
-  SUBSYSTEM=="input", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b664", MODE="0666", GROUP="input"
-  '';  
+  SUBSYSTEM=="input", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b669", MODE="0666"
+  SUBSYSTEM=="hidraw", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b669", MODE="0666"
+  '';
+  
+  
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -172,6 +180,7 @@
   services.usbmuxd.enable = true;
 
   environment.systemPackages = with pkgs; [
+    oversteer 
     xwayland-satellite
     inputs.nix-citizen.packages.${system}.rsi-launcher
     kdePackages.kwallet-pam
