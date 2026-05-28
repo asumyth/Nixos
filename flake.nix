@@ -45,3 +45,4 @@ outputs = { self, nixpkgs, home-manager, nix-index-database, nix-cachyos-kernel,
     ];
   };
 };
+}
