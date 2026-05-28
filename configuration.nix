@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, pkgs-stable , ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -35,7 +35,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   # Load the community Thrustmaster driver for your specific kernel
   boot.extraModulePackages = [ config.boot.kernelPackages.hid-tmff2 ];
   boot.kernelModules = [ "ntsync" "hid-tmff2" ];
