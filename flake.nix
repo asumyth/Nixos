@@ -18,10 +18,9 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 };
 
-outputs = { self, nixpkgs, home-manager, nix-index-database, nix-cachyos-kernel, ... }@inputs: {
+outputs = { self, nixpkgs, home-manager, nix-index-database, ... }@inputs: {
   nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
@@ -38,9 +37,6 @@ outputs = { self, nixpkgs, home-manager, nix-index-database, nix-cachyos-kernel,
       
       {
         nixpkgs.config.allowUnfree = true;
-          nixpkgs.overlays = [
-          nix-cachyos-kernel.overlays.default
-        ];
       }
     ];
   };

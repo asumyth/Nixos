@@ -26,8 +26,13 @@
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
     auto-optimise-store = true;
-    substituters = ["https://nix-citizen.cachix.org"];
-    trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
+    substituters = [
+      "https://nix-citizen.cachix.org"
+    ];
+    
+    trusted-public-keys = [
+      "nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="
+    ];
   };
 
   # Bootloader.
@@ -35,7 +40,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # Load the community Thrustmaster driver for your specific kernel
   boot.extraModulePackages = [ config.boot.kernelPackages.hid-tmff2 ];
   boot.kernelModules = [ "ntsync" "hid-tmff2" ];
@@ -91,11 +96,8 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
-    open = false;
-    nvidiaSettings = true;
-  };
+    open = true;
+   };
 
 
   environment.variables = {
