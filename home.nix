@@ -13,6 +13,7 @@
     element-desktop
     fluffychat
     droidcam
+    discord
     
     # System tools
     unrar
@@ -53,6 +54,7 @@
     motoc
     openssl
     lighthouse-steamvr
+    r2modman
 
     (prismlauncher.override {
       additionalPrograms = [ ffmpeg ];

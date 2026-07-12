@@ -43,21 +43,21 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # Load the community Thrustmaster driver for your specific kernel
   boot.extraModulePackages = [ config.boot.kernelPackages.hid-tmff2 ];
-  boot.kernelModules = [ "ntsync" "hid-tmff2" ];
+  boot.kernelModules = [ "ntsync" "hid-tmff2" "xpadneo" ];
+  boot.extraModprobeConfig = ''
+     options bluetooth disable_ertm=Y
+  '';
   boot.blacklistedKernelModules = [ "hid_thrustmaster" ];
 
-
-  # Enable Protontricks idiomatically
   programs.steam.protontricks.enable = true;
-
-  # Allows Oversteer to communicate with the wheel without root privileges
   services.udev.packages = [ pkgs.oversteer ];
-
+  
   services.udev.extraRules = ''
   SUBSYSTEM=="input", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b669", MODE="0666"
   SUBSYSTEM=="hidraw", ATTRS{idVendor}=="044f", ATTRS{idProduct}=="b669", MODE="0666"
   '';
-  
+
+  hardware.wooting.enable = true;
   
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -68,7 +68,25 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  hardware.bluetooth.enable = true;
+   # Enable Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General = {
+      experimental = true; # show battery
+
+      # https://www.reddit.com/r/NixOS/comments/1ch5d2p/comment/lkbabax/
+      # for pairing bluetooth controller
+      Privacy = "device";
+      JustWorksRepairing = "always";
+      Class = "0x000100";
+      FastConnectable = true;
+    };
+  };
+  services.blueman.enable = true;
+
+  hardware.xpadneo.enable = true; # Enable the xpadneo driver for Xbox One wireless controllers
+
 
   services.mullvad-vpn = {
   enable = true;
@@ -157,6 +175,22 @@
   systemd.user.sockets.pipewire.wantedBy = [ "default.target" ];
   systemd.user.services.wireplumber.wantedBy = [ "default.target" ];
 
+  services.pipewire.wireplumber.extraConfig."51-apple-dongle" = {
+    "monitor.alsa.rules" = [
+      {
+        matches = [
+          { "device.name" = "~alsa_card.*"; }
+        ];
+        actions = {
+          update-props = {
+            "api.alsa.soft-mixer" = true;
+            "api.alsa.ignore-dB" = true;
+          };
+        };
+      }
+    ];
+  };
+
   users.users.asumyth = {
     isNormalUser = true;
     description = "Asumyth";
@@ -175,6 +209,7 @@
   
   programs.steam = {
     enable = true;
+    extest.enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
@@ -199,6 +234,7 @@
     SDL2
     ifuse
     libimobiledevice
+    wootility
   ];
 
 
