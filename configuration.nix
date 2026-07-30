@@ -48,6 +48,7 @@
      options bluetooth disable_ertm=Y
   '';
   boot.blacklistedKernelModules = [ "hid_thrustmaster" ];
+  boot.kernelParams = [ "btusb.enable_autosuspend=0" ];
 
   programs.steam.protontricks.enable = true;
   services.udev.packages = [ pkgs.oversteer ];
@@ -265,9 +266,14 @@
   enable = true;
   openFirewall = true;
   autoStart = true;
-  
+  encoder = [
+    {
+      encoder = "nvenc";
+      codec = "h265";    
+    }
+  ];
   package = (pkgs.wivrn.override {
-#    cudaSupport = true;
+  cudaSupport = true;
   }).overrideAttrs (old: {
     cmakeFlags = (old.cmakeFlags or []) ++ [
       "-DWIVRN_FEATURE_STEAMVR_LIGHTHOUSE=ON"
