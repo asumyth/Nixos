@@ -9,6 +9,7 @@
     
     #Socials browser
     vivaldi
+    brave
     vesktop
     element-desktop
     fluffychat
@@ -31,6 +32,7 @@
     alacritty
     fuzzel
     gimp
+    krita
          
     #language server
     nil
@@ -42,6 +44,10 @@
     mpv
     pwvucontrol
     qpwgraph
+    
+    # vrc tools
+    alcom
+    unityhub
     
     # Gaming
     faugus-launcher

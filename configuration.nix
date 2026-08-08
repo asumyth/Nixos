@@ -26,13 +26,6 @@
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
     auto-optimise-store = true;
-    substituters = [
-      "https://nix-citizen.cachix.org"
-    ];
-    
-    trusted-public-keys = [
-      "nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="
-    ];
   };
 
   # Bootloader.
@@ -88,11 +81,8 @@
 
   hardware.xpadneo.enable = true; # Enable the xpadneo driver for Xbox One wireless controllers
 
-
-  services.mullvad-vpn = {
-  enable = true;
-  package = pkgs.mullvad-vpn;
-  };
+  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.gui.enable = true;
   services.resolved.enable = true;
   
   # Set your time zone.
@@ -226,7 +216,6 @@
   environment.systemPackages = with pkgs; [
     oversteer 
     xwayland-satellite
-    inputs.nix-citizen.packages.${system}.rsi-launcher
     kdePackages.kwallet-pam
     kdePackages.kdenlive
     rustup
@@ -262,16 +251,18 @@
   };
   programs.gamemode.enable = true;
 
+  services.wivrn.config.json = {
+  encoder = [
+    {
+      encoder = "nvenc"; # Or "vulkan"
+      codec = "h265";    # Or "av1"
+    }
+  ];
+  };
   services.wivrn = {
   enable = true;
   openFirewall = true;
   autoStart = true;
-  encoder = [
-    {
-      encoder = "nvenc";
-      codec = "h265";    
-    }
-  ];
   package = (pkgs.wivrn.override {
   cudaSupport = true;
   }).overrideAttrs (old: {
